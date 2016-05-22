@@ -8,12 +8,12 @@ $(function() {
             if (i > 1) {
                 if (checked) {
                     //$(this).css("opacity", 1);
-                    $(tr).removeClass("hidden");
-                    $(tr).data("hidden", false);
+                    tr.removeClass("hidden");
+                    tr.data("hidden", false);
                 } else {
                     //$(this).css("opacity", 0.7);
-                    $(tr).addClass("hidden");
-                    $(tr).data("hidden", true);
+                    tr.addClass("hidden");
+                    tr.data("hidden", true);
                 }
             }
             i++;

@@ -45,7 +45,7 @@ $(function() {
                 var shown = nav.css('left').split(/[^\-\d]+/)[0] === 0;
 
                 if (!shown) {
-                    nav.animate({ left: "0px" }, 200);
+                    nav.animate({ left: "0" }, 200);
                     g.addClass("close-l").fadeIn(200);
                     $("body").addClass("disable-scroll").addClass("mobile-nav-show");
                     $(".c-hamburger").addClass("is-active");
