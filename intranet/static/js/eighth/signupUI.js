@@ -1,6 +1,5 @@
 // Scripts for initial layout, sticky headers, etc.
 /* global $ */
-
 function calcMaxScrollLeft() {
     return $(".days-container")[0].scrollWidth - $(".days-container").width();
 }
@@ -40,15 +39,15 @@ function updateDayNavButtonStatus() {
     $(".earlier-days").removeAttr("disabled");
     $(".later-days").removeAttr("disabled");
 
-    if (scrollLeft == 0) {
-        $(".earlier-days").attr("disabled", "disabled");
+    if (scrollLeft === 0) {
+        $(".earlier-days").attr("disabled", true);
     }
 
     if (Math.abs(scrollLeft - maxScrollLeft) <= 1) {
         // Weird stuff sometimes happens when resizing/zooming window
         // so sometimes these scrollLeft and maxScrollLeft get off by a pixel
         // when they are supposed to be equal
-        $(".later-days").attr("disabled", "disabled");
+        $(".later-days").attr("disabled", true);
     }
 
 
@@ -64,11 +63,10 @@ function scrollBlockChooser(dir) {
     var initialScrollLeft = $daysContainer.scrollLeft();
     var tries = 10;
 
-
-    while(tries-- && $daysContainer.scrollLeft() == initialScrollLeft) {
+    while (tries-- && $daysContainer.scrollLeft() === initialScrollLeft) {
         var $currentDay = $(".current-day");
         var $nextCurrentDay = $currentDay[dir]();
-        if ($nextCurrentDay.length != 0) {
+        if ($nextCurrentDay.length !== 0) {
             $currentDay.removeClass("current-day")
             $nextCurrentDay.addClass("current-day");
         }
@@ -129,14 +127,17 @@ function stickyHeaders(headers) {
             var id = Math.floor((i + 1) * Math.random() * 99999);
             var stuckCopy = $(this).clone().prependTo($("#activity-picker"));
             var empty = $(this).hasClass("empty");
-            if(i == 0 && empty) {
+
+            if (i === 0 && empty) {
                 firstEmpty = true;
             }
-            if ((i == 0 && !empty) || (i == 1 && firstEmpty)) {
+
+            if ((i === 0 && !empty) || (i === 1 && firstEmpty)) {
                  stuckCopy.addClass("stuck");
             } else {
                 stuckCopy.addClass("hidden stuck");
             }
+
             stuckCopy.removeClass("sticky-header");
             $(this).attr("id", id);
             stuckCopy.attr("id", id + "-stuck");
@@ -146,21 +147,22 @@ function stickyHeaders(headers) {
     this.scroll = function() {
         headers.each(function(i) {
             var thisHeader = $(this),
-                prevHeader = headers.eq(i - 1),
-                thrdHeader = headers.eq(i - 2);
+                prevHeader = headers.eq(i-1),
+                thrdHeader = headers.eq(i-2);
             var top = thisHeader.position().top;
 
-            if(prevHeader.hasClass("empty")) {
+            if (prevHeader.hasClass("empty")) {
                 prevHeader = thrdHeader;
             }
 
             if (top <= 0) {
-                if(!thisHeader.hasClass("empty")) {
+                if (!thisHeader.hasClass("empty")) {
                     $("#" + thisHeader.attr("id") + "-stuck").removeClass("hidden");
                 }
+
                 headers.each(function(j) {
                     var loopHeader = $(this);
-                    if(j != i) $("#" + loopHeader.attr("id") + "-stuck").addClass("hidden");
+                    if (j !== i) $("#" + loopHeader.attr("id") + "-stuck").addClass("hidden");
                 });
             } else if (top < 31) {
                 $("#" + prevHeader.attr("id") + "-stuck").css("top", top);
@@ -182,38 +184,40 @@ $(function() {
     });
 
     var initX = null, initY = null, listening = false;
+    
     $(".day-picker").on("touchstart", function(e) {
         e.stopPropagation();
         initX = e.originalEvent.touches[0].clientX;
         initY = e.originalEvent.touches[0].clientY;
         listening = true;
     });
+
     $(".day-picker").on("touchend", function(e) {
         e.stopPropagation();
         listening = false;
     });
+    
     $(".day-picker").on("touchmove", function(e) {
         e.stopPropagation();
-        if (!listening) {
-            return;
-        }
-        var nowX = e.originalEvent.touches[0].clientX;
-        var nowY = e.originalEvent.touches[0].clientY;
+        if (!listening) return;
+
+        var nowX = e.originalEvent.touches[0].clientX,
+            nowY = e.originalEvent.touches[0].clientY;
+
         if (Math.abs(nowY - initY) > 30) {
             listening = false;
             return;
         }
+
         var diffX = nowX - initX;
         if (Math.abs(diffX) > 30) {
-            if (diffX > 0) {
-                $(".earlier-days").click();
-            }
-            else {
-                $(".later-days").click();
-            }
+            if (diffX > 0) $(".earlier-days").click();
+            else $(".later-days").click();
+
             listening = false;
         }
     });
+    
     $("#activity-picker").on("touchstart", function(e) {
         if ($("#activity-picker > .backbtn").hasClass("visible")) {
             e.stopPropagation();
@@ -222,50 +226,54 @@ $(function() {
             listening = true;
         }
     });
+
     $("#activity-picker").on("touchend", function(e) {
         if ($("#activity-picker > .backbtn").hasClass("visible")) {
             e.stopPropagation();
             listening = false;
         }
     });
+
     $("#activity-picker").on("touchmove", function(e) {
         var back = $("#activity-picker > .backbtn");
         if (back.hasClass("visible")) {
             e.stopPropagation();
-            if (!listening) {
-                return;
-            }
-            var nowX = e.originalEvent.touches[0].clientX;
-            var nowY = e.originalEvent.touches[0].clientY;
+            if (!listening) return;
+
+            var nowX = e.originalEvent.touches[0].clientX,
+                nowY = e.originalEvent.touches[0].clientY;
+
             if (Math.abs(nowY - initY) > 30) {
                 listening = false;
                 return;
             }
+
             var diffX = nowX - initX;
             if (Math.abs(diffX) > 30) {
-                if (diffX > 0) {
-                    back.click();
-                }
+                if (diffX > 0) back.click();
+
                 listening = false;
             }
         }
     });
+
     $(window).keydown(function(e) {
         var selected = $("#activity-list li.selected:not(.search-hide)");
         if (selected.length > 0) {
             var flag = false;
-            if (e.which == 38) {
+
+            if (e.which === 38) {
                 // up arrow key
                 selected.prevAll("li:not(.search-hide)").first().click();
                 e.preventDefault();
                 flag = true;
-            }
-            if (e.which == 40) {
+            } else if (e.which === 40) {
                 // down arrow key
                 selected.nextAll("li:not(.search-hide)").first().click();
                 e.preventDefault();
                 flag = true;
             }
+
             if (flag) {
                 var scrollParent = $("#activity-list");
                 selected = $("#activity-list li.selected");

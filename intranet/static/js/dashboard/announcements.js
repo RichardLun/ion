@@ -1,11 +1,10 @@
 /* global $ */
-$(document).ready(function() {
-
+$(function() {
     $("div[data-placeholder]").on("keydown keypress input", function() {
         if (this.textContent) {
             this.dataset.divPlaceholderContent = 'true';
         } else {
-            delete(this.dataset.divPlaceholderContent);
+            delete this.dataset.divPlaceholderContent;
         }
     });
 
@@ -22,32 +21,38 @@ $(document).ready(function() {
 
         var hidden = announcement.hasClass("hidden");
         var action = hidden ? "show" : "hide";
+
         $.post("/announcements/" + action + "?" + id, {announcement_id: id}, function() {
-            console.info("Announcement "+id+" "+action);
+            console.info("Announcement", id, action);
         });
+
         if (action === "show") {
             icon.removeClass("fa-toggle-off")
                     .addClass("fa-toggle-on")
                     .attr("title", icon.attr("data-visible-title"));
+
             setTimeout(function() {
                 announcement.removeClass("hidden");
             }, 450);
+
             announcementContent.css("display", "");
             announcementContent.slideDown(350);
         } else {
             icon.removeClass("fa-toggle-on")
                     .addClass("fa-toggle-off")
                     .attr("title", icon.attr("data-hidden-title"));
+
             setTimeout(function() {
                 announcement.addClass("hidden");
             }, 450);
+
             announcementContent.css("display", "");
             announcementContent.slideUp(350);
         }
     };
 
     $(".announcement[data-id] h3").click(function(e) {
-        if(e.target !== this) {return;}
+        if (e.target !== this) return;
         var btn = $(".announcement-toggle", $(this));
         announcementToggle.call(btn);
     });

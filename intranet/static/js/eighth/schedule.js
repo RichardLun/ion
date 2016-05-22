@@ -5,8 +5,8 @@ $(function() {
         var cb = $("input.scheduled[type=checkbox]", tr);
         var checked = cb.prop("checked");
         $("td", tr).each(function() {
-            if(i > 1) {
-                if(checked) {
+            if (i > 1) {
+                if (checked) {
                     //$(this).css("opacity", 1);
                     $(tr).removeClass("hidden");
                     $(tr).data("hidden", false);
@@ -24,9 +24,9 @@ $(function() {
         var cb = $("input.scheduled[type=checkbox]", this);
         var checked = cb.prop("checked");
         var bt = $("td.block-name a", this).text().trim();
-        if(!checked) {
-            toggleRow($(this));
-        }
+
+        if (!checked) toggleRow($(this));
+
         $(cb).click(function() {
             toggleRow($(this).parent().parent());
         });
@@ -34,22 +34,22 @@ $(function() {
 
     $("select.remote-rooms").change(function(e) {
         var $select = $(e.target);
-
         var capacitySum = 0;
         var val = $select.val();
-        if(val !== null) {
+
+        if (val !== null) {
             val.forEach(function(roomID) {
                 var c = all_rooms_lookup[roomID].capacity;
-                if (c == -1) c = Infinity;
+                if (c === -1) c = Infinity;
                 capacitySum += c;
             });
         }
 
-        if (capacitySum == Infinity) capacitySum = -1;
+        if (capacitySum === Infinity) capacitySum = -1;
         var $capacityInput = $("input.capacity", $select.parent().parent());
         var defaultActivityCapacity = $capacityInput.data("activity-default-capacity");
         var defaultCapacity = $capacityInput.data("default-capacity");
-        $capacityInput.attr("placeholder", capacitySum == 0 ? defaultCapacity : capacitySum);
+        $capacityInput.attr("placeholder", capacitySum === 0 ? defaultCapacity : capacitySum);
     });
 
     window.propagate_direction = "both";
@@ -60,14 +60,14 @@ $(function() {
         console.info("New propagate direction:", opt)
 
         var classes = ["fa-arrows-v", "fa-long-arrow-up", "fa-long-arrow-down"];
-        if(opt == "both") {
-            $(".propagate > i").removeClass(classes[1]).removeClass(classes[2])
+        if (opt === "both") {
+            $(".propagate > i").removeClass(classes[1] + " " + classes[2])
                                .addClass(classes[0]);
-        } else if(opt == "up") {
-            $(".propagate > i").removeClass(classes[0]).removeClass(classes[2])
+        } else if (opt === "up") {
+            $(".propagate > i").removeClass(classes[0] + " " + classes[2])
                                .addClass(classes[1]);
-        } else if(opt == "down") {
-            $(".propagate > i").removeClass(classes[0]).removeClass(classes[1])
+        } else if (opt === "down") {
+            $(".propagate > i").removeClass(classes[0] + " " + classes[1])
                                .addClass(classes[2]);
         }
     }
@@ -78,43 +78,43 @@ $(function() {
     }
 
     $(".propagate").click(function() {
-        var field = $(this).attr("data-field");
-        var input = $(this).attr("data-input");
+        var field = $(this).attr("data-field"),
+            input = $(this).attr("data-input");
         var el = $("#" + input);
         console.debug("Propagate", field, input, el.length > 0);
 
         var rows = $(".schedule-activity-grid tr.form-row");
-        if(window.propagate_direction && window.propagate_direction == "down") {
+        if (window.propagate_direction && window.propagate_direction === "down") {
             var current_row = el.parent().parent();
             var rows = [];
             var row = current_row;
-            while(row && row.length > 0) {
+            while (row && row.length > 0) {
                 row = row.next();
-                if(row.hasClass("form-row")) {
+                if (row.hasClass("form-row")) {
                     rows.push(row[0]);
                 }
             }
             rows = $(rows);
         }
 
-        if(window.propagate_direction && window.propagate_direction == "up") {
+        if (window.propagate_direction && window.propagate_direction === "up") {
             var current_row = el.parent().parent();
             var rows = [];
             var row = current_row;
-            while(row && row.length > 0) {
+            while (row && row.length > 0) {
                 row = row.prev();
-                if(row.hasClass("form-row")) {
+                if (row.hasClass("form-row")) {
                     rows.push(row[0]);
                 }
             }
             rows = $(rows);
         }
 
-        if(window.propagate_method && window.propagate_method == "only_new") {
+        if (window.propagate_method && window.propagate_method === "only_new") {
             var new_rows = [];
-            for(var i=0; i<rows.length; i++) {
+            for (var i = 0; i < rows.length; i++) {
                 var rw = $(rows[i]);
-                if(!rw.hasClass("scheduled")) {
+                if (!rw.hasClass("scheduled")) {
                     new_rows.push(rows[i]);
                 }
             }
@@ -123,7 +123,7 @@ $(function() {
             console.log(rows);
         }
 
-        if(el.hasClass("selectized")) {
+        if (el.hasClass("selectized")) {
             console.info("Selectized element");
             var sel = el[0].selectize;
             mod_items = sel.items;
@@ -138,9 +138,10 @@ $(function() {
                 console.debug("items: ", o_items, "=>", nsel.items);
             });
         } else {
-            if(el.attr("type") == "checkbox") {
+            if (el.attr("type") === "checkbox") {
                 mod_val = el.prop("checked");
                 console.info("Checkbox new value:", mod_val);
+
                 rows.each(function() {
                     var ntd = $("td[data-field='" + field + "']", $(this));
                     var ninp = $("input", ntd);
@@ -161,9 +162,9 @@ $(function() {
 
     $(".selectized").each(function() {
         var sel = $(this)[0].selectize;
-        if(sel) {
+        if (sel) {
             sel.on('item_add', function() {
-              sel.close();
+                sel.close();
             });
         }
     });
