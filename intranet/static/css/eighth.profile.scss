@@ -1,7 +1,40 @@
-.primary-content .eighth-header {
-    position: absolute;
-    right: 10px;
-    width: 200px;
+.primary-content {
+    .eighth-header {
+        position: absolute;
+        right: 10px;
+        width: 200px;
+    }
+
+    &.eighth-signup {
+        @media (max-width: 550px) {
+            .eighth-table {
+                display: none;
+            }
+
+            .middle .switch {
+                display: none;
+            }
+
+            #unsignup-button {
+                zoom: 0.75;
+            }
+        }
+    }
+
+    @media print {
+        .preferred-user-picture {
+            position: absolute;
+        }
+
+        .user-container {
+            position: relative;
+            left: 125px;
+
+            .button {
+                display: none;
+            }
+        }
+    }
 }
 
 .preferred-user-picture > img {
@@ -15,11 +48,17 @@
     padding: 0;
 }
 
-table.user-info-contact tr {
-    line-height: 10px;
+table.user-info-contact {
+    tr {
+        line-height: 10px;
 
-    &.comments {
-        line-height: initial;
+        &.comments {
+            line-height: initial;
+        }
+    }
+
+    div#activity-detail & td {
+        line-height: 16px;
     }
 }
 
@@ -60,49 +99,35 @@ table.eighth-table {
     }
 }
 
-section.user-info-eighth {
-    overflow-x: scroll;
+section.user {
+    &-info-eighth {
+        overflow-x: scroll;
 
-    > form {
-        min-width: 700px;
+        > form {
+            min-width: 700px;
+        }
     }
-}
 
-section.user-info-edit {
-    clear: both;
-    padding-top: 20px;
-    min-width: 400px;
-    overflow-x: scroll;
+    &-info-edit {
+        clear: both;
+        padding-top: 20px;
+        min-width: 400px;
+        overflow-x: scroll;
 
-    > form {
-        min-width: 700px;
+        > form {
+            min-width: 700px;
+        }
     }
-}
 
-section.user-history {
-    clear: both;
-    padding-top: 20px;
-    overflow-x: scroll;
+    &-history {
+        clear: both;
+        padding-top: 20px;
+        overflow-x: scroll;
+    }
 }
 
 table.user-signups-table {
     min-width: 525px;
-}
-
-@media (max-width: 550px) {
-    .primary-content.eighth-signup {
-        .eighth-table {
-            display: none;
-        }
-
-        .middle .switch {
-            display: none;
-        }
-
-        #unsignup-button {
-            zoom: 0.75;
-        }
-    }
 }
 
 @media (max-width: 700px) {
@@ -118,27 +143,6 @@ table.user-signups-table {
 
 div.primary-content.eighth-signup {
     margin-bottom: 0;
-}
-
-div#activity-detail table.user-info-contact td {
-    line-height: 16px;
-}
-
-@media print {
-    .primary-content {
-        .preferred-user-picture {
-            position: absolute;
-        }
-
-        .user-container {
-            position: relative;
-            left: 125px;
-
-            .button {
-                display: none;
-            }
-        }
-    }
 }
 
 .sponsor-table {
