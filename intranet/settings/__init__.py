@@ -259,7 +259,7 @@ LIST_OF_INDEPENDENT_CSS = ['about', 'api', 'login', 'emerg', 'files', 'schedule'
                            'lostfound']
 
 for name in LIST_OF_INDEPENDENT_CSS:
-    PIPELINE['STYLESHEETS'].update(helpers.SingleCss(name))
+    PIPELINE['STYLESHEETS'].update(helpers.single_css_map(name))
 
 AUTHENTICATION_BACKENDS = ("intranet.apps.auth.backends.MasterPasswordAuthenticationBackend",
                            "intranet.apps.auth.backends.KerberosAuthenticationBackend",
